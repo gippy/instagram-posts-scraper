@@ -135,7 +135,10 @@ async function main() {
             page.itemSpec = itemSpec;
 
             switch (resultsType) {
-                case SCRAPE_TYPES.POSTS: return scrapePosts(page, request, itemSpec, entryData, requestQueue);
+                case SCRAPE_TYPES.POSTS: return scrapePosts(page, request, itemSpec, entryData, requestQueue, async (privateUserUrl) => {
+                    Apify.utils.log.info(`${privateUserUrl}" seems to be private. Writing to ${userDneCSV}`);
+                    await fs.promises.appendFile(userDneCSV, `${request.url}${os.EOL}`)
+                });
                 case SCRAPE_TYPES.COMMENTS: return scrapeComments(page, request, itemSpec, entryData);
                 case SCRAPE_TYPES.DETAILS: return scrapeDetails(request, itemSpec, entryData, userResult);
                 default: throw new Error('Not supported');
