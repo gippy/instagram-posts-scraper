@@ -155,6 +155,8 @@ async function main() {
             ...proxy,
             headless: true,
             stealth: true,
+            ignoreHTTPSErrors: true,
+            args: ['--enable-features=NetworkService', '--ignore-certificate-errors'],
         },
         maxConcurrency: 100,
         handlePageTimeoutSecs: 300 * 60, // Ex: 5 hours to crawl thousands of comments
