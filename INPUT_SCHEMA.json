@@ -69,6 +69,13 @@
             "description": "<strong>Proxy is required to run this actor!</strong> Either use Apify proxy, or provide your own proxy servers.",
             "prefill": { "useApifyProxy": true, "apifyProxyGroups": [] },
             "editor": "proxy"
+        },
+        "userDneCSV": {
+            "title": "User doesn't exist CSV",
+            "description": "Absolute path to a CSV that will be filled with all the pages that 404",
+            "editor": "textfield",
+            "type": "string",
+            "default": "dne.csv"
         }
     },
     "required": ["proxy"]

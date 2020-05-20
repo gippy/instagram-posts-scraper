@@ -1,6 +1,9 @@
 const Apify = require('apify');
 const safeEval = require('safe-eval');
 const _ = require('underscore');
+const fs = require('fs');
+var os = require("os");
+var path = require("path");
 
 const { log } = Apify.utils;
 const { scrapePosts, handlePostsGraphQLResponse, scrapePost } = require('./posts');
@@ -13,7 +16,7 @@ const errors = require('./errors');
 
 async function main() {
     const input = await Apify.getInput();
-    const { proxy, resultsType, resultsLimit = 200 } = input;
+    const { userDneCSV = `${__dirname}${path.sep}..${path.sep}dne.csv`, proxy, resultsType, resultsLimit = 200 } = input;
 
     let extendOutputFunction;
     if (typeof input.extendOutputFunction === 'string' && input.extendOutputFunction.trim() !== '') {
@@ -100,7 +103,8 @@ async function main() {
 
     const handlePageFunction = async ({ page, request, response }) => {
         if (response.status() === 404) {
-            Apify.utils.log.info(`Page "${request.url}" does not exist.`);
+            Apify.utils.log.info(`Page "${request.url}" does not exist. Writing to ${userDneCSV}`);
+            await fs.promises.appendFile(userDneCSV, `${request.url}${os.EOL}`)
             return;
         }
         // eslint-disable-next-line no-underscore-dangle
@@ -131,7 +135,10 @@ async function main() {
             page.itemSpec = itemSpec;
 
             switch (resultsType) {
-                case SCRAPE_TYPES.POSTS: return scrapePosts(page, request, itemSpec, entryData, requestQueue);
+                case SCRAPE_TYPES.POSTS: return scrapePosts(page, request, itemSpec, entryData, requestQueue, async (privateUserUrl) => {
+                    Apify.utils.log.info(`${privateUserUrl}" seems to be private. Writing to ${userDneCSV}`);
+                    await fs.promises.appendFile(userDneCSV, `${request.url}${os.EOL}`)
+                });
                 case SCRAPE_TYPES.COMMENTS: return scrapeComments(page, request, itemSpec, entryData);
                 case SCRAPE_TYPES.DETAILS: return scrapeDetails(request, itemSpec, entryData, userResult);
                 default: throw new Error('Not supported');
