@@ -59,8 +59,17 @@ async function main() {
 
     const requestList = await Apify.openRequestList('request-list', requestListSources);
 
+    const cookies = input.loginCookies;
+    if (cookies && Array.isArray(cookies)) {
+        Apify.utils.log.info('setting login cookies');
+    }
+
     const gotoFunction = async ({ request, page }) => {
         await page.setRequestInterception(true);
+        if (cookies && Array.isArray(cookies)) {
+            await page.setCookie(...cookies);
+        }
+
 
         page.on('request', (req) => {
             if (
