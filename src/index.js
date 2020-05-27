@@ -153,6 +153,10 @@ async function main() {
         requestList,
         requestQueue,
         gotoFunction,
+        autoscaledPoolOptions: {
+            snapshotterOptions: { maxBlockedMillis: 500 },
+            systemStatusOptions: { maxEventLoopOverloadedRatio: 0.9 },
+        },
         puppeteerPoolOptions: {
             maxOpenPagesPerInstance: 1,
             retireInstanceAfterRequestCount: 30,
