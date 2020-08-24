@@ -223,12 +223,17 @@ async function main() {
 
             await Apify.pushData(result);
         } else {
-            page.itemSpec = itemSpec;
-            switch (resultsType) {
-                case SCRAPE_TYPES.POSTS: return scrapePosts({ page, request, itemSpec, entryData, input, scrollingState, puppeteerPool });
-                case SCRAPE_TYPES.COMMENTS: return scrapeComments({ page, itemSpec, entryData, scrollingState, puppeteerPool });
-                case SCRAPE_TYPES.DETAILS: return scrapeDetails({ input, request, itemSpec, entryData, page, proxy, userResult });
-                default: throw new Error('Not supported');
+            const el = await page.$('.YlEaT');
+            if (el) {
+                Apify.utils.log.warning(`For link: ${request.url} has no data yet.`)
+            } else {
+                page.itemSpec = itemSpec;
+                switch (resultsType) {
+                    case SCRAPE_TYPES.POSTS: return scrapePosts({ page, request, itemSpec, entryData, input, scrollingState, puppeteerPool });
+                    case SCRAPE_TYPES.COMMENTS: return scrapeComments({ page, itemSpec, entryData, scrollingState, puppeteerPool });
+                    case SCRAPE_TYPES.DETAILS: return scrapeDetails({ input, request, itemSpec, entryData, page, proxy, userResult });
+                    default: throw new Error('Not supported');
+                }
             }
         }
     };
