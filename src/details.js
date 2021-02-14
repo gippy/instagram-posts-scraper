@@ -40,6 +40,13 @@ const formatSinglePost = (node) => {
     const likes = node.edge_liked_by || node.edge_media_preview_like;
     const caption = (node.edge_media_to_caption && node.edge_media_to_caption.edges.length) ? node.edge_media_to_caption.edges[0].node.text : '';
     const { hashtags, mentions } = parseCaption(caption);
+
+    const user = node.user
+    const bio = user && user.biography;
+    const numFollowers = user && user.edge_followed_by && user.edge_followed_by.count;
+    const numFollowing = user && user.edge_follow && user.edge_follow.count;
+    const numPosts =  user && user.edge_owner_to_timeline_media && user.edge_owner_to_timeline_media.count;
+
     return {
         // eslint-disable-next-line no-nested-ternary
         type: node.__typename ? node.__typename.replace('Graph', '') : (node.is_video ? 'Video' : 'Image'),
@@ -69,6 +76,10 @@ const formatSinglePost = (node) => {
         ownerFullName: node.owner ? node.owner.full_name : null,
         ownerUsername: node.owner ? node.owner.username : null,
         ownerId: node.owner ? node.owner.id : null,
+        ownerBio: bio || null,
+        ownerNumPosts: numPosts || null,
+        ownerNumFollowers: numFollowers || null,
+        ownerNumFollowing: numFollowing || null,
     };
 };
 
