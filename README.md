@@ -44,7 +44,7 @@ There are two main components to take into account if you want to run Instagram 
 The usage costs differ depending on what type of page you are scraping. Some pages, such as details, just need to be opened, while other pages, such as comments, require a lot of scrolling. You should roughly compare how long it takes to do these operations manually to get an idea about how to transfer usage costs from one use case to another.
 
 ### Free plan
-Apify provides a free plan where you can test your setup. You need to ask the support team to get access to the residential proxy as it is not included in the free plan.
+Apify provides a free plan where you can test your setup. You need to ask the support team at `support@apify.com` to get access to the residential proxy as it is not included in the free plan.
 
 ### Profile scraping
 Scraping **1000 profiles** requires about:
@@ -52,14 +52,14 @@ Scraping **1000 profiles** requires about:
 - **0.24 GB of proxy traffic**
 
 #### Example pricing
-Based on Apify's pricing at the time of writing, scraping **1000 profiles** would cost 10 CU * $0.25 + 0.24 GB * 12.5 GB which is a total of **$5.5**. The Personal plan ($49) would allow you to scrape about 9000 Instagram profiles monthly.
+Based on Apify's pricing at the time of writing, scraping **1000 profiles** would cost 10 CU * $0.25 + 0.24 GB * $12.5  which is a total of **$5.5**. The Personal plan ($49) would allow you to scrape about 9000 Instagram profiles monthly.
 
 ## Scrolling through large profiles or posts
 Instagram imposes rate limits that will block scrolling if you want to scroll for more than 1000 posts or comments. To work around this issue, the scraper starts injecting randomized wait times once you reach 1000 posts or comments. This is configurable by means of the `scrollWaitSecs` input parameter. If you get the message that you were rate limited, consider increasing this parameter for the specific profile or post.
 
 ## Input parameters
 
-The input of this scraper should be JSON containing the list of pages on Instagram that should be visited. Required fields are:
+The input of this scraper should be JSON containing the list of pages on Instagram that should be visited. Required fields are: proxy.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -70,7 +70,7 @@ The input of this scraper should be JSON containing the list of pages on Instagr
 | directUrls | Array | (optional) List of Instagram URLs (profile or hashtag or place) |
 | resultsType | String | What to scrape from each page, default is "posts" the other option is "comments" |
 | resultsLimit | Integer | How many items should be loaded from each URL (limit is per page) |
-| proxy | Object | Proxy configuration |
+| proxy | Object | Proxy configuration (Use RESIDENTIAL) |
 | scrapePostsUntilDate | String | (optional) Date in the past when you stop scrolling older posts |
 | scrollWaitSecs | Number | How long to wait every 100 scrolled items to prevent blocking by Instagram. This number is randomized. Default is 10 seconds |
 | loginCookies | Array | (optional) Cookies copied from logged in profile (for example using EditThisCookie extension) |
@@ -79,10 +79,10 @@ The input of this scraper should be JSON containing the list of pages on Instagr
 | followedByLimit | Number | (optional) How many followers should be scraped from profile page (only works with login) |
 | expandOwners | Boolean | (optional) **!Experimental!** Load additional details about post owner for each post (slows down the solution a lot) |
 
-This solution requires the use of **Proxy servers**, either your own proxy servers or you can use <a href="https://www.apify.com/docs/proxy">Apify Proxy</a>.
+This solution requires the use of **Proxy servers**, either your own proxy servers or you can use RESIDENTIAL from <a href="https://www.apify.com/docs/proxy">Apify Proxy</a>.
 
 ### Instagram scraper Input example
-```json
+```jsonc
 {
     "search": "Náměstí míru",
     "searchType": "place",
@@ -90,7 +90,7 @@ This solution requires the use of **Proxy servers**, either your own proxy serve
     "directUrls": [ "https://www.instagram.com/teslamotors/" ],
     "resultsType": "posts",
     "resultsLimit": 100,
-    "proxy": { "useApifyProxy": true, "apifyProxyGroups": [] }
+    "proxy": { "useApifyProxy": true, "apifyProxyGroups": ['RESIDENTIAL'] }
 }
 
 ```
@@ -121,7 +121,7 @@ You can manage the results in any language (Python, PHP, Node JS/NPM). See <a hr
 ### Scraped Instagram posts
 The structure of each item in Instagram posts when scrolling looks like this:
 
-```json
+```jsonc
 {
   "#debug": {
     "pageType": "user",
@@ -164,7 +164,7 @@ The structure of each item in Instagram posts when scrolling looks like this:
 ### Scraped Instagram comments
 The structure of each item in Instagram comments looks like this:
 
-```json
+```jsonc
 {
   "#debug": {
     "index": 1,
@@ -190,7 +190,7 @@ The structure of each item in Instagram comments looks like this:
 ### Scraped Instagram profile
 The structure of each user profile looks like this:
 
-```json
+```jsonc
 {
   "#debug": {
     "url": "https://www.instagram.com/avengers/"
@@ -256,7 +256,7 @@ The structure of each user profile looks like this:
 ### Scraped Instagram hashtag
 The structure of each hashtag detail looks like this:
 
-```json
+```jsonc
 {
   "#debug": {
     "url": "https://www.instagram.com/explore/tags/endgame/"
@@ -304,7 +304,7 @@ The structure of each hashtag detail looks like this:
 ### Scraped Instagram place
 The structure of each place detail looks like this:
 
-```json
+```jsonc
 {
   "#debug": {
     "url": "https://www.instagram.com/explore/locations/1017812091/namesti-miru/"
@@ -365,7 +365,7 @@ The structure of each place detail looks like this:
 ### Scraped Instagram post details
 The structure of each post detail looks like this:
 
-```json
+```jsonc
 {
   "#debug": {
     "requestId": "YCyUc93vUGzK9eA",
