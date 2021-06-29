@@ -1,6 +1,6 @@
 {
     "title": "Input schema for Instagram scraper",
-    "description": "Below you can provide search query which will be used to search Instagram for profiles, hashtags or places. Alternatively you can provide direct page URLs. <br />Then on each page you can scrape page details, posts or comments. <br/> <strong>Important: Proxy is required to use this solution</strong>",
+    "description": "Below you can provide search query which will be used to search Instagram for profiles, hashtags or places. Alternatively you can provide direct page URLs. <br />Then on each page you can scrape page details, posts or comments. <br/> <strong>Important: RESIDENTIAL PROXY is required to use this solution</strong>",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
@@ -79,9 +79,9 @@
             "default": 15
         },
         "proxy": {
-            "title": "Proxy configuration",
+            "title": "Proxy configuration \\n Only works with RESIDENTIAL",
             "type": "object",
-            "description": "<strong>Proxy is required to run this actor!</strong> Either use Apify RESIDENTIAL proxy, or provide your own proxy servers. Non-RESIDENTIAL proxy groups usually don't work.",
+            "description": "<strong>Proxy is required to run this actor!</strong> Either use Apify RESIDENTIAL proxy (contact us at support@apify.com to get proxy trial), or provide your own proxy servers. Non-RESIDENTIAL proxy groups usually don't work.",
             "prefill": { "useApifyProxy": true, "apifyProxyGroups": ["RESIDENTIAL"] },
             "editor": "proxy"
         },
